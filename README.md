@@ -22,6 +22,71 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Learn More
 
+## Features Implemented
+## 1. Dynamic Company Pages
+Implemented dynamic routing for each company using the app/[company]/page.js route.
+The company name is detected dynamically via params and used to render:
+Company-specific orders.
+A dynamically loaded company logo.
+## 2. Dynamic Logo Integration
+Logos for each company are stored in the public/logos/ directory.
+Example structure:
+arduino
+Copy code
+public/logos/
+├── daraz.png
+├── amazon.png
+├── foodpanda.png
+The logo URL is constructed dynamically based on the company name:
+javascript
+Copy code
+const logoUrl = `../../../public/logos/${companyName}.png`;
+If a logo is missing, the application gracefully handles the error and doesn't render the logo.
+## 3. Orders Table
+Data Source: Mock data for orders is stored in utils/sampleOrders.js.
+Sorting: Users can click on table headers to sort columns (Order ID, Customer Name, Amount, Status) in ascending or descending order.
+Pagination:
+Displays 10 orders per page.
+Includes "Previous" and "Next" buttons for navigation.
+Buttons are disabled when at the first or last page.
+## 4. UI Design
+Designed using Tailwind CSS for a clean and responsive layout.
+Table design includes:
+Hover effects on rows.
+Alternating borders for better readability.
+Colored status text:
+Delivered: Green.
+Cancelled: Red.
+Default: Gray.
+Pagination controls are styled with hover and disabled states.
+## 5. How the Task Was Accomplished
+Dynamic Routing:
+
+A dynamic route app/[company]/page.js was created.
+The params object is used to extract the company name from the URL and render relevant data.
+Orders Integration:
+
+Orders are fetched dynamically from utils/sampleOrders.js.
+Based on the company name, the relevant order data is displayed in the table.
+Logo Integration:
+
+Logos are stored in public/logos/ for easy access.
+The path is dynamically constructed using:
+javascript
+Copy code
+const logoUrl = `public/logos/${companyName}.png`;
+Sorting and Pagination:
+
+Sorting is implemented using a sortConfig state.
+Pagination limits the displayed orders to 10 per page and handles navigation seamlessly.
+Local Development:
+
+Local subdomains (daraz.localhost:3000) were simulated using query parameters:
+ruby
+Copy code
+http://localhost:3000/?company=daraz
+This approach simplifies testing and avoids DNS configuration issues.
+
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
