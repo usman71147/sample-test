@@ -1,14 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image"; // Import Next.js Image component
 import { sampleOrders } from "../../utils/sampleOrders";
 
+import darazLogo from "../../../public/logos/daraz.png";
+import amazonLogo from "../../../public/logos/amazon.png";
+import foodpandaLogo from "../../../public/logos/foodpanda.png";
+
 const OrdersTable = ({ params }) => {
-  const [company, setCompany] = useState(""); // State to store the company
+  const [company, setCompany] = useState("");
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-  const [logo, setLogo] = useState("");
+  const [logo, setLogo] = useState(null);
 
   const ordersPerPage = 10;
 
@@ -16,15 +21,20 @@ const OrdersTable = ({ params }) => {
     // Unwrap params asynchronously
     (async () => {
       const unwrappedParams = await params;
-      const companyName = unwrappedParams?.company || "default"; // Fallback to 'default'
+      const companyName = unwrappedParams?.company || "default";
       setCompany(companyName);
 
       const companyOrders = sampleOrders[companyName] || [];
       setOrders(companyOrders);
 
-      // Set the logo URL based on the company
-      const logoUrl = `../../../public/logos/${companyName}.png`;
-      setLogo(logoUrl);
+      // Set the logo based on the company
+      const logoMap = {
+        daraz: darazLogo,
+        amazon: amazonLogo,
+        foodpanda: foodpandaLogo,
+      };
+
+      setLogo(logoMap[companyName] || null);
     })();
   }, [params]);
 
@@ -52,15 +62,17 @@ const OrdersTable = ({ params }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
+    <div className="min-h-screen bg-gray-100 flex justify-center flex-col items-center py-8">
       <div className="w-full max-w-6xl bg-white rounded-lg shadow-md p-4">
         {/* Header with Logo */}
-        <div className="flex justify-center items-center mb-6">
+        <div className="flex justify-between items-center mb-6">
           {logo && (
-            <img
+            <Image
               src={logo}
               alt={`${company} Logo`}
               className="h-16 w-auto object-contain mr-4"
+              height={64}
+              width={128}
             />
           )}
           <h1 className="text-2xl font-bold text-gray-700">
@@ -105,9 +117,9 @@ const OrdersTable = ({ params }) => {
                   key={order.orderId}
                   className="border-t border-gray-200 hover:bg-gray-50"
                 >
-                  <td className="px-4 py-2">{order.orderId}</td>
-                  <td className="px-4 py-2">{order.customerName}</td>
-                  <td className="px-4 py-2">{order.amount}</td>
+                  <td className="px-4 py-2 text-black">{order.orderId}</td>
+                  <td className="px-4 py-2 text-black">{order.customerName}</td>
+                  <td className="px-4 py-2 text-black">{order.amount}</td>
                   <td
                     className={`px-4 py-2 ${
                       order.status === "Delivered"
